@@ -77,6 +77,11 @@ const createWindow = () => {
   );
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(MENU));
+  const test = Menu.getApplicationMenu().getMenuItemById('export-all-keys');
+  test.click = () => {
+    mainWindow.webContents.send('export-all-keys-clicked');
+  };
+
 
   exports.app = app;
   exports.mainWindow = mainWindow;

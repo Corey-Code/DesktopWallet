@@ -1,30 +1,56 @@
 // @flow
-
+import path from 'path';
 import { openExternal } from './utils/open-external';
+import { openItem } from './utils/open-item';
 import packageJson from '../package.json';
+import { getVidulumFolder } from '../config/daemon/get-vidulum-folder';
+import { isTestnet } from '../config/is-testnet';
 
+const isMac = process.platform === 'darwin';
 const DOCS_URL = 'https://vidulum.app/';
-const REPOSITORY_URL = 'https://github.com/vidulum/DesktopWallet/';
+const VDL_CONF_PATH = path.join(getVidulumFolder(), 'vidulum.conf');
+const VDL_MASTERNODE_CONF_PATH = path.join(getVidulumFolder(), 'masternode.conf');
+const EXPLORER_URL = isTestnet()
+  ? 'https://vdlt-explorer.vidulum.app/'
+  : 'https://explorer.vidulum.app/';
+const WEBWALLET_URL = 'https://wallet.vidulum.app';
+
+const submenu = [
+  {
+    label: 'Open vidulum.conf',
+    click() {
+      openItem(VDL_CONF_PATH);
+    },
+  },
+  {
+    label: 'Open masternode.conf',
+    click() {
+      openItem(VDL_MASTERNODE_CONF_PATH);
+    },
+  },
+  {
+    label: 'Open Explorer',
+    click() {
+      openExternal(EXPLORER_URL);
+    },
+  },
+  {
+    label: 'Open Webwallet',
+    click() {
+      openExternal(WEBWALLET_URL);
+    },
+  },
+  { type: 'separator' },
+  {
+    label: 'Exit',
+    role: isMac ? 'close' : 'quit',
+  },
+];
 
 const menu = [
   {
-    label: 'Edit',
-    submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
-      { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      { role: 'delete' },
-      { role: 'selectall' },
-    ],
-  },
-  {
-    label: 'View',
-    submenu: [
-      { role: 'togglefullscreen' },
-    ],
+    label: 'Menu',
+    submenu,
   },
 ];
 
@@ -35,17 +61,10 @@ const helpMenu = {
       label: `Vidulum Desktop Wallet Version v${packageJson.version}`,
       enabled: false,
     },
-    { type: 'separator' },
     {
-      label: 'Help / FAQ',
+      label: 'Get Help',
       click() {
         openExternal(DOCS_URL);
-      },
-    },
-    {
-      label: 'Search Issues',
-      click() {
-        openExternal(REPOSITORY_URL);
       },
     },
   ],
@@ -54,15 +73,7 @@ const helpMenu = {
 if (process.platform === 'darwin') {
   menu.unshift({
     label: packageJson.name,
-    submenu: [
-      { role: 'about' },
-      { type: 'separator' },
-      { role: 'hide' },
-      { role: 'hideothers' },
-      { role: 'unhide' },
-      { type: 'separator' },
-      { role: 'quit' },
-    ],
+    submenu,
   });
 
   menu.push({

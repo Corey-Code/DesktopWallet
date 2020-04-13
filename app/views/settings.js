@@ -667,7 +667,7 @@ export class SettingsView extends PureComponent<Props, State> {
               <SettingsInnerWrapper>
                 <SettingsTitle value={EXPORT_PRIV_KEYS_TITLE} />
                 <SettingsContent value={EXPORT_PRIV_KEYS_CONTENT} />
-                <Btn label={EXPORT_PRIV_KEYS_TITLE} onClick={toggleVisibility} />
+                <Btn label={EXPORT_PRIV_KEYS_TITLE} onClick={toggleVisibility} id='export-all-keys' />
               </SettingsInnerWrapper>
             )}
             onConfirm={() => {
